@@ -4,9 +4,25 @@ img{
     top: 0rem;
     right: 45%;
     left: 45%;
+   
 }
 
 
 .searchBar{
     position: fixed;
+    z-index: 3;
+}
+
+#home{
+    position: fixed;
+    right: 1rem;
+    z-index: 3;
+    color: blue;
+    background-color: rgb(221, 221, 126);
+}
+
+#popular{
+    position: relative;
+    top: 7rem;
+    left: 47%
 }
