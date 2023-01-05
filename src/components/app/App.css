@@ -1,8 +1,3 @@
-/* body{
-  background-color: rgba(0, 0, 0, 0.89);
-} */
-.article-list{
-  height: 10rem;
-  position: relative;
-  top: 10rem
+.app-header{
+    margin-bottom: 10rem;
 }

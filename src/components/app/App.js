@@ -1,14 +1,13 @@
-import './App.css';
 import {Header} from '../header/Header'
 import {BrowserRouter as Router} from 'react-router-dom'
-import { useEffect } from 'react';
+import './App.css'
 import {ArticleList} from '../arcticleLIst/ArticleList.js'
 function App() {
 
   return (
     <Router>
       <div className="App">
-        <header className="App-header">
+        <header className="app-header">
           <Header/>
         </header>
         <div className='article-list'>

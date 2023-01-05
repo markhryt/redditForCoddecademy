@@ -16,55 +16,98 @@ export const popular= createAsyncThunk(
             const response=await data.json()
             return response
         }
-    )       
+    )
+    
+    export const loadComment= createAsyncThunk(
+        'articles/comments',
+        async(action)=>{
+            const data = await fetch(`//www.reddit.com/${action.subreddit}/comments/${action.id}.json`)
+            const response=await data.json()
+            console.log(response)
+            return response
+        }
+    )
 export const articleListSlice = createSlice({
     name:'articles',
     initialState: {
         articles: [],
-        isLoading: false, 
-        hasError: false
+        comments: [],
+        currentArticleId: {},
+        //popular
+        isLoadingPopular: false, 
+        hasErrorPopular: false,
+        //search
+        isLoadingSearch: false,
+        hasErrorSearch: false,
+        //loading
+        isLoadingComment: false,
+        hasErrorComment: false 
     },
     reducers:{
         print: (state)=>{
             console.log()
+        },
+        changeCurrentArticleId: (state, action)=>{
+            state.currentArticleId.id=action.payload.id
+            state.currentArticleId.subreddit=action.payload.subreddit_name_prefixed
         }
     }
     ,
 
     extraReducers: (builder)=>{
         builder
+        //popular
         .addCase(popular.pending, (state) => {
-            state.isLoading=true;
-            state.hasError=false;
+            state.isLoadingPopular=true;
+            state.hasErrorPopular=false;
         })
         .addCase(popular.fulfilled, (state, action)=>{
             state.articles=action.payload
-            state.isLoading=false;
-            state.hasError=false;
+            state.isLoadingPopular=false;
+            state.hasErrorPopular=false;
         })
         .addCase(popular.rejected, (state)=>{
-            state.isLoading=false;
-            state.hasError=true;
+            state.isLoadingPopular=false;
+            state.hasErrorPopular=true;
         })
+        //search
         .addCase(searchFor.pending, (state)=>{
-            state.isLoading=true;
-            state.hasError=false;
+            state.isLoadingSearch=true;
+            state.hasErrorSearch=false;
         })
         .addCase(searchFor.fulfilled, (state, action)=>{
             state.articles=action.payload
-            state.isLoading=false;
-            state.hasError=false;
+            state.isLoadingSearch=false;
+            state.hasErrorSearch=false;
         })
         .addCase(searchFor.rejected, (state)=>{
-            state.isLoading=false;
-            state.hasError=true;
+            state.isLoadingSearch=false;
+            state.hasErrorSearch=true;
+        })
+        //load Comments
+        .addCase(loadComment.pending, (state)=>{
+            state.isLoadingComment=true;
+            state.hasErrorComment=false;
+        })
+        .addCase(loadComment.fulfilled, (state, action)=>{
+            state.comments=action.payload
+            state.isLoadingComment=false;
+            state.hasErrorComment=false;
+        })
+        .addCase(loadComment.rejected, (state)=>{
+            state.isLoadingComment=false;
+            state.hasErrorComment=true;
         })
     }
 })
-
+//reducer
 export default articleListSlice.reducer
-
-export const selectArticles = (state) =>state.articleList.articles
-
-
+//selectors
+export const selectArticles = (state) => state.articleList.articles
+export const selectCurrentArticleId=(state)=>state.articleList.currentArticleId
+export const selectComments = (state)=> state.articleList.comments
+export const selecIsLoadingComment=(state)=> state.articleList.isLoadingComment
+//actions
+export const changeCurrentArticleId=articleListSlice.actions.changeCurrentArticleId
 export const print=articleListSlice.actions.print
+
